@@ -1,0 +1,14 @@
+*.d
+*.o
+
+# Compiled executables
+*.out
+run_tests
+
+
+# Program Output
+*.log
+
+
+# IDE
+.vscode/
