@@ -1,0 +1,56 @@
+#include "image_procesing.hpp"
+
+namespace imgproc {
+
+std::vector<cv::Point> extractLargestContour(
+    const std::vector<std::vector<cv::Point>>& contours)
+{
+    // TODO: implement — loop contours, return the one with max cv::contourArea
+    (void)contours;
+    return {};
+}
+
+cv::Point2f computeCentroid(const std::vector<cv::Point>& contour)
+{
+    // TODO: implement — use cv::moments, return (m10/m00, m01/m00)
+    (void)contour;
+    return {0.0f, 0.0f};
+}
+
+bool isAtCenter(const cv::Point2f& centroid, int frameWidth, int tolerance)
+{
+    // TODO: implement — abs(centroid.x - frameWidth/2) < tolerance
+    (void)centroid;
+    (void)frameWidth;
+    (void)tolerance;
+    return false;
+}
+
+std::array<double, 7> computeHuMoments(const std::vector<cv::Point>& contour)
+{
+    // TODO: implement — cv::moments -> cv::HuMoments -> copy to array
+    (void)contour;
+    return {};
+}
+
+std::vector<std::complex<double>> contourToComplexSignature(
+    const std::vector<cv::Point>& contour,
+    cv::Point2f centroid)
+{
+    // TODO: implement — for each point: r, theta -> complex(r*cos(theta), r*sin(theta))
+    (void)contour;
+    (void)centroid;
+    return {};
+}
+
+std::vector<double> computeFFTDescriptors(
+    const std::vector<std::complex<double>>& signature,
+    int numDescriptors)
+{
+    // TODO: implement — cv::dft, magnitudes, normalize by DC, return first N
+    (void)signature;
+    (void)numDescriptors;
+    return {};
+}
+
+} // namespace imgproc
