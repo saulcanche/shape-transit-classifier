@@ -6,8 +6,14 @@ std::vector<cv::Point> extractLargestContour(
     const std::vector<std::vector<cv::Point>>& contours)
 {
     // TODO: implement — loop contours, return the one with max cv::contourArea
-    (void)contours;
-    return {};
+    if(contours.empty()) return {};
+    double maxArea = 0;
+    size_t idx = 0;
+    for(size_t i = 0; i < contours.size(); i++){
+        double area = cv::contourArea(contours[i]);
+        if(area > maxArea) maxArea = area, idx = i;
+    }
+    return contours[idx];
 }
 
 cv::Point2f computeCentroid(const std::vector<cv::Point>& contour)
