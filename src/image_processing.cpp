@@ -5,7 +5,6 @@ namespace imgproc {
 std::vector<cv::Point> extractLargestContour(
     const std::vector<std::vector<cv::Point>>& contours)
 {
-    // TODO: implement — loop contours, return the one with max cv::contourArea
     if(contours.empty()) return {};
     double maxArea = 0;
     size_t idx = 0;
@@ -19,8 +18,9 @@ std::vector<cv::Point> extractLargestContour(
 cv::Point2f computeCentroid(const std::vector<cv::Point>& contour)
 {
     // TODO: implement — use cv::moments, return (m10/m00, m01/m00)
-    (void)contour;
-    return {0.0f, 0.0f};
+    cv::Moments m = cv::moments(contour, false);
+    if (m.m00 == 0) return {0.0f, 0.0f};
+    return {static_cast<float>(m.m10 / m.m00), static_cast<float>(m.m01 / m.m00)};
 }
 
 bool isAtCenter(const cv::Point2f& centroid, int frameWidth, int tolerance)
