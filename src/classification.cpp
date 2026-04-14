@@ -44,8 +44,8 @@ double distanceHuMoments(
 {
     double distance = 0.0;
     for(int i = 0; i < 7; i++){
-        if(a[i] < 1e-30 || b[i] < 1e-30) continue; 
-        distance += std::abs(std::log(a[i]) - std::log(b[i]));
+        if(std::abs(a[i]) < 1e-30 || std::abs(b[i]) < 1e-30) continue; 
+        distance += std::abs(std::log(std::abs(a[i])) - std::log(std::abs(b[i])));
     }
     return distance;
 }
@@ -69,12 +69,18 @@ int classifyShape(
     double huWeight,
     double fftWeight)
 {
-    // TODO: implement — weighted nearest-neighbor, return id of closest ref
-    (void)query;
-    (void)refs;
-    (void)huWeight;
-    (void)fftWeight;
-    return -1;
+    double minDistance = std::numeric_limits<double>::max();
+    int bestId = -1;
+    for(const auto& ref : refs){
+        double huDistance = distanceHuMoments(query.huMoments, ref.huMoments);
+        double fftDistance = distanceFFT(query.fftDescriptors, ref.fftDescriptors);
+        double totalDistance = huWeight * huDistance + fftWeight * fftDistance;
+        if(totalDistance < minDistance){
+            minDistance = totalDistance;
+            bestId = ref.id;
+        }
+    }
+    return bestId;
 }
 
 } // namespace classify
