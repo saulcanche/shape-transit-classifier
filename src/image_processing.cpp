@@ -53,10 +53,16 @@ std::vector<double> computeFFTDescriptors(
     const std::vector<std::complex<double>>& signature,
     int numDescriptors)
 {
-    // TODO: implement — cv::dft, magnitudes, normalize by DC, return first N
-    (void)signature;
-    (void)numDescriptors;
-    return {};
+    std::vector<std::complex<double>> sig_copy(signature);
+    cv::Mat mat(1, (int)signature.size(), CV_64FC2, sig_copy.data());
+    std::vector<double> descriptors;
+    descriptors.reserve(numDescriptors);
+    cv::dft(mat, mat, cv::DFT_COMPLEX_OUTPUT);
+    for(int i = 0; i < numDescriptors && i < mat.cols; i++){
+        double magnitude = std::sqrt(mat.at<cv::Vec2d>(0, i)[0]*mat.at<cv::Vec2d>(0, i)[0] + mat.at<cv::Vec2d>(0, i)[1]*mat.at<cv::Vec2d>(0, i)[1]);
+        descriptors.push_back(magnitude);
+    }
+    return descriptors;
 }
 
 } // namespace imgproc
