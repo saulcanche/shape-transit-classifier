@@ -46,7 +46,7 @@ double distanceHuMoments(
 {
     double distance = 0.0;
     for(int i = 0; i < 7; i++){
-        if(std::abs(a[i]) < 1e-30 || std::abs(b[i]) < 1e-30) continue; 
+        if(std::abs(a[i]) < 1e-15 || std::abs(b[i]) < 1e-15) continue; 
         distance += std::abs(std::log(std::abs(a[i])) - std::log(std::abs(b[i])));
     }
     return distance;
