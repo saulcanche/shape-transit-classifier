@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 int main()
 {
@@ -21,7 +22,7 @@ int main()
     const int         numFFTDesc   = 100;
     const int         resampleN    = 256;
     const double      huWeight     = 1.0;
-    const double      fftWeight    = 1.0;
+    const double      fftWeight    = 5.0;
     const int         threshVal    = 128;
     const double      minArea      = 500.0;    // ignore tiny noise contours
     const double      matchDist    = 60.0;     // same-shape centroid matching
@@ -52,6 +53,9 @@ int main()
     }
 
     int frameWidth = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));
+
+    std::ofstream outFile("data/actual_list.txt");
+    if (!outFile.is_open()) return 1;
 
     // --- State ---
     std::vector<cv::Point2f> prevCenterCentroids;
@@ -114,6 +118,7 @@ int main()
 
                 int bestId = classify::classifyShape(query, refs, huWeight, fftWeight);
                 std::cout << "figId =  " << bestId << std::endl;
+                outFile << "figId =  " << bestId << std::endl;
                 lastDetectedId = bestId;
 
                 // Prepare reference image for the side panel

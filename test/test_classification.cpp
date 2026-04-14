@@ -156,9 +156,10 @@ TEST(ImageProcessing, ComputeFFTDescriptors_Normalized)
     }
 
     auto desc = imgproc::computeFFTDescriptors(sig, 16);
-    // After normalization by DC component, the first value should be 1.0
+    // After normalization by fundamental frequency component, desc[1] should be 1.0
     ASSERT_FALSE(desc.empty());
-    EXPECT_NEAR(desc[0], 1.0, 0.01);
+    ASSERT_GT(desc.size(), 1);
+    EXPECT_NEAR(desc[1], 1.0, 0.01);
 }
 
 // ============================================================================

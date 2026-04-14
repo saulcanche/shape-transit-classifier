@@ -62,9 +62,9 @@ std::vector<double> computeFFTDescriptors(
         double magnitude = std::sqrt(mat.at<cv::Vec2d>(0, i)[0]*mat.at<cv::Vec2d>(0, i)[0] + mat.at<cv::Vec2d>(0, i)[1]*mat.at<cv::Vec2d>(0, i)[1]);
         descriptors.push_back(magnitude);
     }
-    if(!descriptors.empty() && descriptors[0] != 0.0){
-        double dc = descriptors[0];
-        for(auto& descriptor: descriptors) descriptor /= dc; 
+    if(descriptors.size() > 1 && descriptors[1] != 0.0){
+        double scale = descriptors[1];
+        for(size_t i = 1; i < descriptors.size(); ++i) descriptors[i] /= scale; 
     }
     return descriptors;
 }

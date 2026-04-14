@@ -18,8 +18,11 @@ $(TARGET): $(MAIN_SRC) $(SRC)
 	$(CXX) $(CXXFLAGS) $(CVFLAGS) -o $@ $^ $(CVLIBS)
 
 # --- Test build & run ---
-test: $(TEST_BIN)
+test: $(TEST_BIN) $(TARGET)
 	./$(TEST_BIN)
+	@echo "\n--- Running End-to-End Precision Test ---"
+	QT_QPA_PLATFORM=offscreen ./$(TARGET)
+	python3 scripts/calculate_precision.py
 
 $(TEST_BIN): $(TEST_SRC) $(SRC)
 	$(CXX) $(CXXFLAGS) $(CVFLAGS) -o $@ $^ $(CVLIBS) $(GTFLAGS)

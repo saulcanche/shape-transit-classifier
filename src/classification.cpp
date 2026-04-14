@@ -61,7 +61,7 @@ double distanceFFT(
         std::cerr << "Error: FFT descriptors have different sizes" << std::endl;
         return -1.0;
     }
-    for(int i = 0; i < a.size(); i++) distance += (a[i] - b[i]) * (a[i] - b[i]);
+    for(size_t i = 1; i < a.size(); i++) distance += (a[i] - b[i]) * (a[i] - b[i]);
     return std::sqrt(distance);
 }
 
