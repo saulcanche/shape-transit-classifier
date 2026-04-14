@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 
 int main()
 {
@@ -63,6 +64,10 @@ int main()
     cv::Mat lastRefDisplay;           // cached panel image of last detection
 
     cv::Mat frame, gray, binary;
+
+    int visualDelay = 50;
+    cv::namedWindow("Shape Transit Classifier", cv::WINDOW_AUTOSIZE);
+    cv::createTrackbar("Delay (ms)", "Shape Transit Classifier", &visualDelay, 200);
 
     while (cap.read(frame)) {
         // 1. Preprocess
@@ -172,7 +177,8 @@ int main()
 
         cv::hconcat(frame, panel, display);
         cv::imshow("Shape Transit Classifier", display);
-        if (cv::waitKey(1) == 27) break;  // ESC to quit
+        // Wait according to the trackbar delay, but ensure it's at least 1ms to prevent infinite pausing 
+        if (cv::waitKey(std::max(1, visualDelay)) == 27) break;  // ESC to quit
 
         prevCenterCentroids = curCenterCentroids;
     }

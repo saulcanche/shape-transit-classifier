@@ -70,10 +70,15 @@ std::vector<double> computeFFTDescriptors(
 }
 
 std::vector<cv::Point> resampleContour(
-    const std::vector<cv::Point>& contour, int numPoints)
+    const std::vector<cv::Point>& contour_in, int numPoints)
 {
-    if (static_cast<int>(contour.size()) <= 1 || numPoints <= 0)
-        return contour;
+    if (static_cast<int>(contour_in.size()) <= 1 || numPoints <= 0)
+        return contour_in;
+
+    std::vector<cv::Point> contour = contour_in;
+    if (contour.front() != contour.back()) {
+        contour.push_back(contour.front());
+    }
 
     // Cumulative arc-length
     std::vector<double> arcLen(contour.size(), 0.0);
