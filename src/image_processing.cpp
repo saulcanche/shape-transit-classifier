@@ -17,7 +17,6 @@ std::vector<cv::Point> extractLargestContour(
 
 cv::Point2f computeCentroid(const std::vector<cv::Point>& contour)
 {
-    // TODO: implement — use cv::moments, return (m10/m00, m01/m00)
     cv::Moments m = cv::moments(contour, false);
     if (m.m00 == 0) return {0.0f, 0.0f};
     return {static_cast<float>(m.m10 / m.m00), static_cast<float>(m.m01 / m.m00)};
@@ -30,9 +29,10 @@ bool isAtCenter(const cv::Point2f& centroid, int frameWidth, int tolerance)
 
 std::array<double, 7> computeHuMoments(const std::vector<cv::Point>& contour)
 {
-    // TODO: implement — cv::moments -> cv::HuMoments -> copy to array
-    (void)contour;
-    return {};
+    cv::Moments m = cv::moments(contour, false);
+    std::array<double, 7> huMoments;
+    cv::HuMoments(m, huMoments);
+    return huMoments;
 }
 
 std::vector<std::complex<double>> contourToComplexSignature(
