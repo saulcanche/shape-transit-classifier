@@ -39,10 +39,14 @@ std::vector<std::complex<double>> contourToComplexSignature(
     const std::vector<cv::Point>& contour,
     cv::Point2f centroid)
 {
-    // TODO: implement — for each point: r, theta -> complex(r*cos(theta), r*sin(theta))
-    (void)contour;
-    (void)centroid;
-    return {};
+    std::vector<std::complex<double>> signature;
+    signature.reserve(contour.size());
+    for(const auto& p : contour){
+        double dx = p.x - centroid.x, dy = p.y - centroid.y;
+        double r = std::sqrt(dx*dx + dy*dy), theta = std::atan2(dy, dx);
+        signature.emplace_back(r * std::cos(theta), r * std::sin(theta));
+    }
+    return signature;
 }
 
 std::vector<double> computeFFTDescriptors(
