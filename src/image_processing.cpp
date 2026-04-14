@@ -25,11 +25,7 @@ cv::Point2f computeCentroid(const std::vector<cv::Point>& contour)
 
 bool isAtCenter(const cv::Point2f& centroid, int frameWidth, int tolerance)
 {
-    // TODO: implement — abs(centroid.x - frameWidth/2) < tolerance
-    (void)centroid;
-    (void)frameWidth;
-    (void)tolerance;
-    return false;
+    return std::abs(centroid.x - frameWidth/2) < tolerance;
 }
 
 std::array<double, 7> computeHuMoments(const std::vector<cv::Point>& contour)
