@@ -11,8 +11,6 @@ std::vector<ShapeDescriptor> loadReferenceDescriptors(
     const std::string& refDir,
     int numShapes)
 {
-    // TODO: implement — for each Forma_XX.png: load, grayscale, threshold,
-    //   findContours, extractLargestContour, computeHuMoments, computeFFTDescriptors
     std::vector<ShapeDescriptor> descriptors;
     descriptors.reserve(numShapes);
     for(int i = 0; i < numShapes; i++){
@@ -44,20 +42,25 @@ double distanceHuMoments(
     const std::array<double, 7>& a,
     const std::array<double, 7>& b)
 {
-    // TODO: implement — sum of |log|a_i| - log|b_i|| for i = 0..6
-    (void)a;
-    (void)b;
-    return -1.0;
+    double distance = 0.0;
+    for(int i = 0; i < 7; i++){
+        if(a[i] < 1e-30 || b[i] < 1e-30) continue; 
+        distance += std::abs(std::log(a[i]) - std::log(b[i]));
+    }
+    return distance;
 }
 
 double distanceFFT(
     const std::vector<double>& a,
     const std::vector<double>& b)
 {
-    // TODO: implement — sqrt(sum((a_i - b_i)^2))
-    (void)a;
-    (void)b;
-    return -1.0;
+    double distance = 0.0;
+    if(a.size() != b.size()){
+        std::cerr << "Error: FFT descriptors have different sizes" << std::endl;
+        return -1.0;
+    }
+    for(int i = 0; i < a.size(); i++) distance += (a[i] - b[i]) * (a[i] - b[i]);
+    return std::sqrt(distance);
 }
 
 int classifyShape(
