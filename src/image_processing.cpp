@@ -69,4 +69,41 @@ std::vector<double> computeFFTDescriptors(
     return descriptors;
 }
 
+std::vector<cv::Point> resampleContour(
+    const std::vector<cv::Point>& contour, int numPoints)
+{
+    if (static_cast<int>(contour.size()) <= 1 || numPoints <= 0)
+        return contour;
+
+    // Cumulative arc-length
+    std::vector<double> arcLen(contour.size(), 0.0);
+    for (size_t i = 1; i < contour.size(); ++i) {
+        double dx = contour[i].x - contour[i - 1].x;
+        double dy = contour[i].y - contour[i - 1].y;
+        arcLen[i] = arcLen[i - 1] + std::sqrt(dx * dx + dy * dy);
+    }
+    double totalLen = arcLen.back();
+    if (totalLen < 1e-6) return contour;
+
+    std::vector<cv::Point> resampled(numPoints);
+    for (int i = 0; i < numPoints; ++i) {
+        double target = totalLen * i / numPoints;
+        auto it    = std::lower_bound(arcLen.begin(), arcLen.end(), target);
+        size_t idx = static_cast<size_t>(std::distance(arcLen.begin(), it));
+        if (idx == 0) {
+            resampled[i] = contour[0];
+        } else {
+            double segLen = arcLen[idx] - arcLen[idx - 1];
+            double t = (segLen > 1e-9)
+                           ? (target - arcLen[idx - 1]) / segLen
+                           : 0.0;
+            resampled[i].x = static_cast<int>(
+                contour[idx - 1].x + t * (contour[idx].x - contour[idx - 1].x));
+            resampled[i].y = static_cast<int>(
+                contour[idx - 1].y + t * (contour[idx].y - contour[idx - 1].y));
+        }
+    }
+    return resampled;
+}
+
 } // namespace imgproc

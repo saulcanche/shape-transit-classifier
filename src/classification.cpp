@@ -21,7 +21,7 @@ std::vector<ShapeDescriptor> loadReferenceDescriptors(
             continue;
         }
         cv::Mat binary;
-        cv::threshold(img, binary, 128, 255, cv::THRESH_BINARY);
+        cv::threshold(img, binary, 128, 255, cv::THRESH_BINARY_INV);
         std::vector<std::vector<cv::Point>> contours;
         cv::findContours(binary, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
         std::vector<cv::Point> largestContour = imgproc::extractLargestContour(contours);
@@ -29,6 +29,8 @@ std::vector<ShapeDescriptor> loadReferenceDescriptors(
             std::cerr << "Error: Could not find contour in image " << fileName << std::endl;
             continue;
         }
+        // Resample to fixed size so FFT descriptors always have consistent length
+        largestContour = imgproc::resampleContour(largestContour, 256);
         cv::Point2f centroid = imgproc::computeCentroid(largestContour);
         std::array<double, 7> huMoments = imgproc::computeHuMoments(largestContour);
         std::vector<std::complex<double>> signature = imgproc::contourToComplexSignature(largestContour, centroid);

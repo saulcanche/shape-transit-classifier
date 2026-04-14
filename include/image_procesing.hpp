@@ -39,6 +39,13 @@ std::vector<double> computeFFTDescriptors(
     const std::vector<std::complex<double>>& signature,
     int numDescriptors);
 
+// Resamples a contour to exactly numPoints evenly-spaced points along its
+// perimeter using linear interpolation.  Ensures a fixed-length signature
+// regardless of the original number of contour vertices.
+std::vector<cv::Point> resampleContour(
+    const std::vector<cv::Point>& contour,
+    int numPoints);
+
 } // namespace imgproc
 
 #endif // IMAGE_PROCESSING_HPP
