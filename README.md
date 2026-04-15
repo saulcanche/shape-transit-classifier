@@ -4,6 +4,15 @@ A C++ based computer vision application that processes a video stream to detect 
 
 It utilizes image processing techniques including contour extraction, Hu Moments, and Discrete Fourier Transform (DFT) descriptors via OpenCV to accurately identify and classify various shapes.
 
+![app](docs/img/app.png) *Figure 1: Shape Transit Classifier Application*
+
+## Reference Shapes
+
+The classifier identifies and categorizes 17 distinct geometric shapes:
+
+![Reference Shapes](data/reference_shapes/Formas.png)
+*Figure 2: Set of 17 reference shapes for classification.*
+
 ## Prerequisites
 
 **Tip: Using Docker is the absolute easiest way to run this project!** If you have Docker installed, you can skip installing local dependencies entirely. See the [Docker Quickstart](#docker-quickstart-recommended) section below.
